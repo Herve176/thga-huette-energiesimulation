@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Geräteempfehlungen und Marktübersicht für die THGA-Hütte">
+  <title>Hüttenenergie · Empfehlung</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="empfehlung.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="Zurück zur Simulation">
+      <span class="brand-mark" aria-hidden="true">H</span>
+      <span>Hüttenenergie</span>
+    </a>
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <a href="index.html">Simulation</a>
+      <a href="graph.html">Ergebnisse</a>
+      <a href="graph.html#bauphysik">Bauphysik</a>
+      <a class="active" href="empfehlung.html">Empfehlung</a>
+    </nav>
+    <button class="print-button" id="printButton" type="button">Als PDF drucken</button>
+  </header>
+
+  <main class="recommendation-page">
+    <section class="page-heading">
+      <div>
+        <p class="eyebrow"><span></span> Geräteauslegung</p>
+        <h1>Deine Empfehlung</h1>
+        <p>Wärmeerzeugung, Solarenergie und Speicher für dein THGA-Projekt.</p>
+      </div>
+      <span class="market-badge">Marktcheck · Nov. 2026</span>
+    </section>
+
+    <section class="recommendation-summary" aria-label="Empfehlungsübersicht">
+      <article class="summary-card pump-summary">
+        <small>Wärmepumpentyp</small>
+        <div class="summary-icon pump-icon" aria-hidden="true">❄</div>
+        <h2 id="pumpType">Luft-Luft-Split-Wärmepumpe</h2>
+        <p id="pumpDescription">Geeignet für kleine THGA-Hütten mit begrenztem Platzbedarf.</p>
+      </article>
+
+      <article class="summary-card system-summary">
+        <small>Systemdimensionierung</small>
+        <div class="summary-spec-grid">
+          <div><span>Empfohlene Leistung</span><strong id="pumpPower">2,5 kW</strong></div>
+          <div><span>Speicherbedarf</span><strong id="tankSize">Kein Pufferspeicher nötig</strong></div>
+          <div><span>PV-Ergänzung</span><strong id="pvRecommendation">2,7 kWp</strong></div>
+        </div>
+      </article>
+
+      <article class="summary-card suitability-summary">
+        <small>Eignung für dein Objekt</small>
+        <div class="suitability-heading"><strong id="matchScore">86 %</strong><span id="matchLabel">Sehr gute Passung</span></div>
+        <div class="match-bar"><i id="matchBar"></i></div>
+        <p id="matchText">Dämmstandard, Dachfläche und Speicher sind passend dimensioniert.</p>
+      </article>
+
+      <article class="summary-card pv-summary">
+        <div class="summary-card-heading">
+          <span class="summary-icon pv-icon" aria-hidden="true">☀</span>
+          <div><small>Photovoltaik</small><h2 id="pvTitle">470-Wp-ABC-Module</h2></div>
+        </div>
+        <div class="summary-spec-grid four">
+          <div><span>Empfohlen</span><strong id="pvCapacity">2,82 kWp</strong></div>
+          <div><span>Modulanzahl</span><strong id="pvModules">6 Module</strong></div>
+          <div><span>Modulfläche</span><strong id="pvArea">11,95 m²</strong></div>
+        </div>
+        <div class="roof-warning" id="roofWarning" hidden></div>
+      </article>
+
+      <article class="summary-card battery-summary">
+        <div class="summary-card-heading">
+          <span class="summary-icon battery-icon" aria-hidden="true">▮</span>
+          <div><small>Batteriespeicher</small><h2 id="batteryTitle">LiFePO₄</h2></div>
+        </div>
+        <div class="summary-spec-grid three">
+          <div><span>Marktklasse</span><strong id="batteryCapacity">4,8 kWh</strong></div>
+          <div><span>Entladeleistung</span><strong id="batteryPower">Abhängig vom Wechselrichter</strong></div>
+          <div><span>Beispiele</span><strong>Huawei · BYD · Pylontech</strong></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="cost-overview" aria-label="Gesamtkostenübersicht">
+      <div class="cost-overview-heading">
+        <div>
+          <small>Gesamtkosten-Übersicht</small>
+          <strong>Hardware-Investition</strong>
+        </div>
+        <label class="shell-toggle">
+          <input type="checkbox" id="shellToggle">
+          <span>THGA-Holzhülle <b>1.977,77 €</b></span>
+        </label>
+      </div>
+      <div class="cost-columns">
+        <div><span>Wärmepumpe</span><strong id="heatPumpCost">1.843 €</strong></div>
+        <div><span>PV-Module</span><strong id="pvCost">462 €</strong></div>
+        <div><span>Batteriespeicher</span><strong id="batteryCost">750 €</strong></div>
+        <div class="total-cost"><span>Gesamt Hardware</span><strong id="totalCost">3.055 €</strong></div>
+      </div>
+    </section>
+
+    <section class="catalog-section">
+      <div class="catalog-heading">
+        <div>
+          <p>Verifizierter Marktkatalog</p>
+          <h2>Produkte auswählen</h2>
+        </div>
+        <div class="category-tabs" id="categoryTabs" role="tablist" aria-label="Produktkategorien">
+          <button type="button" class="active" data-category="alle" role="tab">Alle</button>
+          <button type="button" data-category="heat" role="tab">Wärmepumpen</button>
+          <button type="button" data-category="pv" role="tab">PV-Module</button>
+          <button type="button" data-category="battery" role="tab">Batteriespeicher</button>
+        </div>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <aside class="calculation-note">
+      <strong>Berechnungsannahmen</strong>
+      <p>Bochum-Standort, 20 °C Raumtemperatur, −5 °C Auslegungstemperatur, 25 K Temperaturdifferenz. Dachfläche inklusive Überstände: (Länge + 0,425 m) × (Breite + 0,475 m). Wärmelast: Gebäudehülle × U-Wert × 25 K. Marktwerte inklusive ausgewiesener MwSt.-Klasse; Herstellerdaten und Installation vor dem Kauf bestätigen.</p>
+    </aside>
+  </main>
+
+  <script src="recommendations-page.js" defer></script>
+</body>
+</html>

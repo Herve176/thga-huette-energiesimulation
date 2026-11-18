@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ergebnisse und Geräteempfehlungen der THGA-Hüttenenergie-Simulation">
+  <title>Hüttenenergie · Ergebnisse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="graph.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Zurück zur Simulation">
+        <span class="brand-mark">H</span>
+        <span>Hüttenenergie</span>
+      </a>
+      <nav class="main-nav" aria-label="Hauptnavigation">
+        <a href="index.html">Simulation</a>
+        <a class="active" href="graph.html">Ergebnisse</a>
+        <a href="#bauphysik">Bauphysik</a>
+        <a href="empfehlung.html">Empfehlung</a>
+      </nav>
+      <a class="back-button" href="index.html">Zur Simulation</a>
+    </header>
+
+    <main>
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow"><span></span> Auswertung</p>
+          <h1>Deine Simulationsergebnisse</h1>
+          <p>Jahresbilanz, Systemleistung und passende Geräteempfehlung auf einen Blick.</p>
+        </div>
+        <button class="export-button" id="printButton" type="button">Ergebnisse drucken</button>
+      </section>
+
+      <section class="summary-grid" aria-label="Kennzahlen">
+        <article class="summary-card">
+          <span class="summary-icon leaf">♧</span>
+          <div><small>Autarkiegrad</small><strong id="autarky">83 %</strong></div>
+          <span class="status-pill" id="autarkyStatus">Gut versorgt</span>
+        </article>
+        <article class="summary-card">
+          <span class="summary-icon bolt">ϟ</span>
+          <div><small>Jahresstrombedarf</small><strong id="annualDemand">1.160 kWh</strong></div>
+        </article>
+        <article class="summary-card">
+          <span class="summary-icon warning">△</span>
+          <div><small>Versorgungslücke</small><strong id="shortage">17 h</strong></div>
+        </article>
+      </section>
+
+      <section class="analysis-grid">
+        <article class="chart-card">
+          <div class="card-heading">
+            <div>
+              <p>Monatsbilanz</p>
+              <h2>Energieerzeugung und Bedarf</h2>
+            </div>
+            <div class="legend"><span><i class="pv-dot"></i>PV-Erzeugung</span><span><i class="load-dot"></i>Strombedarf</span></div>
+          </div>
+          <div class="bar-chart" id="barChart" role="img" aria-label="Monatliche PV-Erzeugung und Strombedarf"></div>
+        </article>
+
+        <article class="balance-card">
+          <div class="card-heading">
+            <div><p>Systemgröße</p><h2>Anlagenauslegung</h2></div>
+          </div>
+          <div class="gauge" aria-label="Anlagenstatus">
+            <div class="gauge-ring" id="gaugeRing">
+              <div><strong id="gaugeValue">83</strong><span>% Autarkie</span></div>
+            </div>
+          </div>
+          <div class="system-values">
+            <div><span>PV-Leistung</span><strong id="pvValue">6 kWp</strong></div>
+            <div><span>Batteriekapazität</span><strong id="batteryValue">10 kWh</strong></div>
+            <div><span>Gebäudefläche</span><strong id="areaValue">12,3 m²</strong></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="physics-section" id="bauphysik">
+        <div class="physics-heading">
+          <div>
+            <p>THGA Building Physics</p>
+            <h2>Bauphysik & kritische Winterversorgung</h2>
+          </div>
+          <span class="demo-label">Berechnungsstand · Ist / Sanierung</span>
+        </div>
+
+        <div class="physics-grid">
+          <article class="glaser-card">
+            <div class="card-heading">
+              <div><p>Dachaufbau · Glaser-Verfahren</p><h2>Temperatur- & Taupunktprofil</h2></div>
+              <div class="segmented" id="glaserSwitch" aria-label="Dachzustand auswählen">
+                <button type="button" class="active" data-state="existing">Ist-Zustand</button>
+                <button type="button" data-state="retrofit">Sanierung</button>
+              </div>
+            </div>
+            <div class="glaser-layout">
+              <div class="glaser-legend">
+                <span><i class="temp-line"></i>Temperatur</span>
+                <span><i class="dew-line"></i>Taupunkt 9,3 °C</span>
+              </div>
+              <div id="glaserChart" class="glaser-chart" role="img" aria-label="Glaser-Temperaturprofil des Dachquerschnitts"></div>
+              <div class="glaser-result" id="glaserResult"></div>
+            </div>
+          </article>
+
+          <article class="heat-loss-card">
+            <div class="card-heading">
+              <div><p>Transmissionswärmeverlust</p><h2>Wärmeverlust nach Bauteil</h2></div>
+            </div>
+            <div class="heat-loss-key">
+              <span><i class="existing-key"></i>Ist-Zustand</span>
+              <span><i class="retrofit-key"></i>Sanierung</span>
+            </div>
+            <div id="heatLossChart" class="heat-loss-chart"></div>
+            <div class="u-total">
+              <span>Mittlerer Gebäude-U-Wert</span>
+              <strong><b id="existingU">0,40</b> <em>→</em> <b id="retrofitU">0,32</b> W/m²K</strong>
+            </div>
+          </article>
+
+          <article class="battery-card">
+            <div class="card-heading">
+              <div><p>Bochum · bewölkte Winterwoche</p><h2>Batterieladung 168 Stunden</h2></div>
+              <div class="segmented" id="batterySwitch" aria-label="Batteriekapazität auswählen">
+                <button type="button" data-battery="5">5 kWh</button>
+                <button type="button" class="active" data-battery="10">10 kWh</button>
+              </div>
+            </div>
+            <div id="batteryChart" class="battery-chart" role="img" aria-label="Batterieladezustand über eine Woche"></div>
+            <div class="battery-footer">
+              <div><span>Niedrigster Ladezustand</span><strong id="minimumSoc">-- %</strong></div>
+              <div><span>Stunden Unterdeckung</span><strong id="shortageHours">-- h</strong></div>
+              <div><span>Kritische Folge</span><strong id="criticalState">--</strong></div>
+            </div>
+          </article>
+
+          <article class="cost-card">
+            <div class="card-heading">
+              <div><p>BOM & Investition</p><h2>Material- und Systemkosten</h2></div>
+              <span class="cost-total">1.977,77 € <small>Hülse</small></span>
+            </div>
+            <div id="costChart" class="cost-chart"></div>
+            <div class="cost-scaling">
+              <div><span>Sanierung · +100 mm PIR</span><strong>≈ 650 €</strong></div>
+              <div><span>PV-Anlage</span><strong>≈ 4.000 €</strong></div>
+              <div><span>Speicher + Wechselrichter</span><strong>≈ 2.500 €</strong></div>
+            </div>
+            <p class="cost-note">Die 1.977,77 € sind die prototypische Hüllen-Kostenbasis. Sanierung und Energiekomponenten sind zusätzliche Orientierungsbudgets.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="results-cta" aria-label="Geräteauswahl">
+        <div>
+          <p>Marktübersicht</p>
+          <h2>Passende Geräte und Investition berechnen</h2>
+        </div>
+        <a class="cta-button" href="empfehlung.html">Zur Empfehlung <span aria-hidden="true">→</span></a>
+      </section>
+    </main>
+  </div>
+  <script src="energy-model.js" defer></script>
+  <script src="graph.js" defer></script>
+</body>
+</html>

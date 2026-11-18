@@ -1,18 +1,151 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Website</title>
-  
-  <!-- css code -->
+  <meta name="description" content="Interaktive Auslegung einer autarken THGA-Hüttenenergieversorgung.">
+  <title>Hüttenenergie · Simulation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header class="topbar">
+    <a class="brand" href="#simulation" aria-label="Hüttenenergie Startseite">
+      <span class="brand-mark" aria-hidden="true">H</span>
+      <span>Hüttenenergie</span>
+    </a>
+    <nav class="main-nav" aria-label="Hauptnavigation">
+      <a class="active" href="#simulation">Simulation</a>
+      <a href="graph.html" id="resultsLink">Ergebnisse</a>
+      <a href="graph.html#bauphysik">Bauphysik</a>
+      <a href="empfehlung.html">Empfehlung</a>
+      <button class="nav-button" id="variantsLink" type="button">Varianten</button>
+    </nav>
+    <div class="header-actions">
+      <span class="location-pill"><span class="location-dot"></span> THGA Bochum</span>
+      <button class="menu-button" aria-label="Menü öffnen" aria-expanded="false" type="button">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
 
-  <h1>Hello, World!</h1>
+  <main class="container" id="simulation">
+    <section class="page-header">
+      <div>
+        <p class="eyebrow"><span></span> Energiekonzept</p>
+        <h1>Deine Hütte. Deine Energie.</h1>
+        <p class="subtitle">Plane die autarke Versorgung der THGA-Hütte.</p>
+      </div>
+      <div class="preset-badge">
+        <span class="preset-icon" aria-hidden="true">⌂</span>
+        <div><strong>THGA-Hütte</strong><small>2,70 × 2,025 × 2,40 m</small></div>
+      </div>
+    </section>
 
-  <!-- Js code -->
+    <div class="workspace">
+      <aside class="settings-panel card" aria-label="Simulationsparameter">
+        <div class="panel-heading">
+          <span>Konfiguration</span>
+          <button id="resetButton" class="reset-button" type="button">THGA zurücksetzen</button>
+        </div>
+
+        <section class="setting-section open">
+          <button class="section-heading" type="button" aria-expanded="true">
+            <strong>Gebäude</strong>
+          </button>
+          <div class="section-content">
+            <label class="number-field"><span>Länge</span><span class="value-box"><input id="lengthInput" type="number" value="2.7" min="2" max="20" step="0.1"><em>m</em></span></label>
+            <label class="number-field"><span>Breite</span><span class="value-box"><input id="widthInput" type="number" value="2.025" min="2" max="20" step="0.1"><em>m</em></span></label>
+            <label class="number-field"><span>Höhe</span><span class="value-box"><input id="heightInput" type="number" value="2.4" min="2" max="8" step="0.1"><em>m</em></span></label>
+            <label class="select-field" for="insulation">
+              <span>Dämmzustand</span>
+              <select id="insulation">
+                <option value="0.42">Nicht gedämmt</option>
+                <option value="0.34" selected>Vorhandener Bestand</option>
+                <option value="0.16">Sanierter Zustand</option>
+              </select>
+            </label>
+            <div id="physicsHint" class="physics-hint warning">Ist-Zustand: Hülse gedämmt, aber Feuchteschutz und Luftdichtheit prüfen.</div>
+          </div>
+        </section>
+
+        <section class="setting-section">
+          <button class="section-heading" type="button" aria-expanded="false">
+            <strong>Nutzung</strong>
+          </button>
+          <div class="section-content collapsed">
+            <label class="select-field" for="occupancy">
+              <span>Nutzungsprofil</span>
+              <select id="occupancy">
+                <option value="weekend" selected>Wochenende</option>
+                <option value="regular">Dauernutzung</option>
+                <option value="vacant">Leerstand</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section class="setting-section open">
+          <button class="section-heading" type="button" aria-expanded="true">
+            <strong>Energiesystem</strong>
+          </button>
+          <div class="section-content">
+            <div class="range-field">
+              <div class="range-heading"><label for="pvRange">PV-Leistung</label></div>
+              <div class="range-line"><input id="pvRange" type="range" min="1" max="12" value="6" step="0.5"><output id="pvOutput" for="pvRange">6 <small>kWp</small></output></div>
+            </div>
+            <div class="range-field">
+              <div class="range-heading"><label for="batteryRange">Batteriespeicher</label></div>
+              <div class="range-line"><input id="batteryRange" type="range" min="2" max="20" value="10" step="1"><output id="batteryOutput" for="batteryRange">10 <small>kWh</small></output></div>
+            </div>
+            <div id="roofWarning" class="physics-hint warning" hidden></div>
+          </div>
+        </section>
+      </aside>
+
+      <section class="visual-column">
+        <article class="model-stage card">
+          <img src="images/thga-huette.jpg" alt="THGA-Tiny-House mit Holzfassade auf dem Campus" loading="eager">
+          <article class="weather-card" aria-label="Wetter- und Standortdaten">
+            <strong>Bochum · TRY-Profil</strong>
+            <div class="weather-values"><span>Auslegungswinter<br><b>−5 °C</b></span><span>PV-Ausrichtung<br><b>Süd · 30°</b></span></div>
+            <small>Vereinfachte stündliche Wetterannahme</small>
+          </article>
+          <div class="metrics-overlay" aria-label="Simulationsergebnisse">
+            <div class="metric-row"><span>Autarkiegrad</span><strong id="autarky">83 %</strong><span class="pill" id="autarkyTrend">Gut</span></div>
+            <div class="metric-row"><span>Jahresstrombedarf</span><strong id="demand">1.160 kWh</strong></div>
+            <div class="metric-row"><span>Versorgungslücke</span><strong id="shortage">17 h</strong></div>
+          </div>
+        </article>
+
+        <article class="chart-card card" aria-labelledby="chartTitle">
+          <div class="card-heading"><div><p>TRY-Orientierung</p><h2 id="chartTitle">Monatliche Energiebilanz</h2></div><span class="preview-label">Datenmodell</span></div>
+          <div class="chart" id="chart" role="img" aria-label="PV-Erzeugung und Strombedarf über zwölf Monate"></div>
+          <div class="legend"><span><i class="pv-dot"></i>PV-Erzeugung</span><span><i class="load-dot"></i>Strombedarf</span></div>
+        </article>
+
+        <div class="action-row">
+          <button class="btn-outline" id="saveButton" type="button">Variante speichern</button>
+          <button class="btn-primary" id="simulateButton" type="button">Simulation starten</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <aside class="variant-drawer" id="variantDrawer" aria-label="Gespeicherte Varianten" aria-hidden="true">
+    <div class="drawer-heading"><div><small>Vergleich</small><h2>Varianten</h2></div><button id="closeDrawer" type="button" aria-label="Varianten schließen">×</button></div>
+    <div id="variantList" class="variant-list"><p class="empty-state">Noch keine Varianten gespeichert.</p></div>
+  </aside>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+  <div class="calculation-overlay" id="calculationOverlay" role="dialog" aria-modal="true" aria-labelledby="calculationTitle">
+    <div class="calculation-dialog"><div class="calculation-spinner" aria-hidden="true"></div><h2 id="calculationTitle">Simulation läuft</h2><p>Gebäudelast, TRY-Profil und Energiesystem werden ausgewertet.</p></div>
+  </div>
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script src="energy-model.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 </html>
